@@ -36,6 +36,14 @@ export const api = {
     renomear: (id, title) => pedir("PATCH", `/lists/${id}`, { title }),
     excluir: (id) => pedir("DELETE", `/lists/${id}`),
   },
+  tickets: {
+    listar: () => pedir("GET", "/tickets"),
+    abrir: (title, message) => pedir("POST", "/tickets", { title, message }),
+    detalhe: (id) => pedir("GET", `/tickets/${id}`),
+    mudarStatus: (id, status) => pedir("PATCH", `/tickets/${id}`, { status }),
+    excluir: (id) => pedir("DELETE", `/tickets/${id}`),
+    enviar: (id, content) => pedir("POST", `/tickets/${id}/messages`, { content }),
+  },
   cartoes: {
     criar: (listId, title, description) => pedir("POST", `/lists/${listId}/cards`, corpo({ title, description })),
     editar: (id, mudanca) => pedir("PATCH", `/cards/${id}`, corpo(mudanca)),

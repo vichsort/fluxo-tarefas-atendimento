@@ -2,7 +2,8 @@ import { Botao } from "./componentes/Botao.jsx";
 import { Icone } from "./componentes/Icone.jsx";
 
 /** Lateral com a lista de quadros e o atalho para criar um novo. */
-export function BarraLateral({ quadros, quadroId, aoSelecionar, aoNovoQuadro, aoRenomear, aoExcluir }) {
+export function BarraLateral({ tela, aoMudarTela, quadros, quadroId, aoSelecionar, aoNovoQuadro, aoRenomear, aoExcluir }) {
+  const noQuadro = tela === "quadros";
   return (
     <aside className="lateral" aria-label="Quadros">
       <a className="marca" href="/" aria-label="Fluxo, voltar ao início" style={{ textDecoration: "none" }}>
@@ -11,6 +12,13 @@ export function BarraLateral({ quadros, quadroId, aoSelecionar, aoNovoQuadro, ao
         </span>
         <span className="marca-nome">Fluxo</span>
       </a>
+
+      <nav className="lateral-nav" aria-label="Áreas do sistema">
+        <button type="button" className="lateral-nav-item" data-ativo={tela === "atendimento" ? "" : undefined} aria-current={tela === "atendimento" ? "page" : undefined} onClick={() => aoMudarTela("atendimento")}>
+          <Icone nome="chat" tamanho={18} />
+          Atendimento
+        </button>
+      </nav>
 
       <div className="lateral-topo">
         <h2 className="lateral-titulo">Quadros</h2>
@@ -23,11 +31,11 @@ export function BarraLateral({ quadros, quadroId, aoSelecionar, aoNovoQuadro, ao
         <ul className="lateral-lista">
           {quadros.map((quadro) => (
             <li key={quadro.id}>
-              <div className="lateral-item" data-ativo={quadro.id === quadroId ? "" : undefined}>
+              <div className="lateral-item" data-ativo={noQuadro && quadro.id === quadroId ? "" : undefined}>
                 <button
                   type="button"
                   className="lateral-escolha"
-                  aria-current={quadro.id === quadroId ? "page" : undefined}
+                  aria-current={noQuadro && quadro.id === quadroId ? "page" : undefined}
                   onClick={() => aoSelecionar(quadro.id)}
                 >
                   {quadro.title}

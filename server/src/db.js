@@ -58,6 +58,25 @@ const MIGRACOES = [
      ('card-api', 'list-fazendo', 'Montar a API de quadros', 'Boards, listas e cartões com movimentação entre listas.', 0),
      ('card-paleta', 'list-pronto', 'Escolher a paleta de cores', '', 0),
      ('card-metricas', 'list-backlog', 'Medir tempo por cartão', '', 0);`,
+  `CREATE TABLE ticket (
+     id TEXT PRIMARY KEY,
+     title TEXT NOT NULL,
+     status TEXT NOT NULL DEFAULT 'open',
+     criado_em TEXT NOT NULL,
+     atualizado_em TEXT NOT NULL
+   );
+   CREATE TABLE ticket_mensagem (
+     id TEXT PRIMARY KEY,
+     ticket_id TEXT NOT NULL REFERENCES ticket(id) ON DELETE CASCADE,
+     role TEXT NOT NULL,
+     content TEXT NOT NULL,
+     criado_em TEXT NOT NULL
+   );
+   INSERT INTO ticket (id, title, status, criado_em, atualizado_em) VALUES
+     ('ticket-exemplo', 'Como compartilho um quadro com a equipe?', 'open', '2026-11-10T10:00:00.000Z', '2026-11-10T10:01:00.000Z');
+   INSERT INTO ticket_mensagem (id, ticket_id, role, content, criado_em) VALUES
+     ('msg-exemplo-1', 'ticket-exemplo', 'user', 'Olá! Como compartilho um quadro com a equipe?', '2026-11-10T10:00:00.000Z'),
+     ('msg-exemplo-2', 'ticket-exemplo', 'agent', 'Olá! Recebemos o seu pedido e um agente vai responder por aqui em breve.', '2026-11-10T10:01:00.000Z');`,
 ];
 
 /** `caminho` = arquivo do banco; `:memory:` nos testes. */

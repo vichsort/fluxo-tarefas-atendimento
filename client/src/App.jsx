@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { api } from "./api.js";
 import { BarraLateral } from "./BarraLateral.jsx";
 import { TelaQuadro } from "./TelaQuadro.jsx";
+import { Atendimento } from "./Atendimento.jsx";
 import { Botao } from "./componentes/Botao.jsx";
 import { Campo } from "./componentes/Campo.jsx";
 import { Confirmar } from "./componentes/Confirmar.jsx";
@@ -43,6 +44,7 @@ export function App() {
   const [erro, setErro] = useState(null);
   const [dialogo, setDialogo] = useState(null);
   const [tentativa, setTentativa] = useState(0);
+  const [tela, setTela] = useState("quadros");
 
   // Quadros: a lista vem da API e define qual quadro fica aberto.
   useEffect(() => {
@@ -256,16 +258,19 @@ export function App() {
   return (
     <div className="app">
       <BarraLateral
+        tela={tela}
+        aoMudarTela={setTela}
         quadros={quadros}
         quadroId={quadroId}
-        aoSelecionar={setQuadroId}
+        aoSelecionar={(id) => { setQuadroId(id); setTela("quadros"); }}
         aoNovoQuadro={() => setDialogo({ tipo: "novo-quadro" })}
         aoRenomear={(quadro) => setDialogo({ tipo: "renomear-quadro", quadro })}
         aoExcluir={(quadro) => setDialogo({ tipo: "excluir-quadro", quadro })}
       />
 
       <main className="canvas">
-        {erro ? (
+        {tela === "atendimento" ? <Atendimento /> : null}
+        {tela === "quadros" && erro ? (
           <div className="aviso" role="alert">
             <span className="aviso-texto">
               <Icone nome="alerta" tamanho={18} />
@@ -275,7 +280,7 @@ export function App() {
           </div>
         ) : null}
 
-        {conteudo()}
+        {tela === "quadros" ? conteudo() : null}
       </main>
 
       {dialogo?.tipo === "novo-quadro" ? (
